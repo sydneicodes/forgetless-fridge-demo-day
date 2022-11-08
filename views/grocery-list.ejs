@@ -1,0 +1,86 @@
+<!doctype html>
+<html>
+<head> 
+    <title>Forgetless Fridge</title>
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css">
+    <link rel="stylesheet" href="grocerylist.css">
+</head>
+<body>
+ <!-- bootstrap navigation -->
+  <header class="navbar navbar-inverse navbar-fixed-top bs-docs-nav" role="banner">
+    <div class="container">
+      <div class="navbar-header">
+        <button class="navbar-toggle" type="button" data-toggle="collapse" data-target=".bs-navbar-collapse">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+      </div>
+
+      <nav class="collapse navbar-collapse bs-navbar-collapse" role="navigation">
+        <ul class="nav navbar-nav navbar-right">
+          <li>
+            <a href="/profile">Profile</a>
+          </li>
+          <li>
+            <a href="/grocery_list">Grocery List</a>
+          </li>
+          <li>
+            <a href="/manage_fridge">Manage Your Fridge</a>
+          </li>
+          <li><a href="/logout">Log Out</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+<!-- navigation -->
+
+<!-- Grocery List -->
+<!-- <main>
+    <div class="container">
+      <div class="notebook">
+        <div class="title">
+          <h1>Grocery List</h1>
+        </div>
+        <div class="input-container">
+          <i class="fa-solid fa-eraser" id="eraser"></i>
+          <input type="text" id="userInput">
+        </div>
+        <div id="groceryItems"></div>
+      </div>
+    </div>
+  </main> -->
+
+  <section class="header">
+    <h1>Grocery</h1>
+    </section>
+
+    <section class="groceryItemInput">
+        <form action="/groceries" method="POST">
+            <input type="text" id="inputItem" placeholder="Enter grocery item:">
+            <button id="addButton">Add</button>
+        </form>
+    </section>
+    
+
+    <!-- <section class="groceryList">
+        <ul>
+            <% for(var i=0; i < groceries.length; i++){ %>
+                <li class="groceryItem">
+                    <input type="checkbox">
+                    <span><% groceries[i].groceries %></span>
+                </li>
+            <% } %>
+        </ul>
+    </section> -->
+
+    <section class="clear">
+        <button class="clearAllItems">Clear List</button>
+        <button class="clearCompleted">Clear Completed</button>
+    </section>
+
+</body>
+</html>
