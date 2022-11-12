@@ -55,32 +55,29 @@
   </main> -->
 
   <section class="header">
-    <h1>Grocery</h1>
+    <h1>Grocery Hello</h1>
     </section>
 
     <section class="groceryItemInput">
         <form action="/groceries" method="POST">
-            <input type="text" id="inputItem" placeholder="Enter grocery item:">
-            <button id="addButton">Add</button>
+            <input type="text" id="inputItem" placeholder="Enter grocery item:" name="groceries">
+            <button type="submit" id="addButton">Add</button>
         </form>
     </section>
     
 
-    <!-- <section class="groceryList">
+    <section class="groceryList">
         <ul>
             <% for(var i=0; i < groceries.length; i++){ %>
                 <li class="groceryItem">
                     <input type="checkbox">
-                    <span><% groceries[i].groceries %></span>
+                    <span><%= groceries[i].groceries %></span>
+                    <!-- icon -->
                 </li>
             <% } %>
         </ul>
-    </section> -->
-
-    <section class="clear">
-        <button class="clearAllItems">Clear List</button>
-        <button class="clearCompleted">Clear Completed</button>
     </section>
 
+    <!-- Finalized List (Go to the next step) -->
 </body>
 </html>
