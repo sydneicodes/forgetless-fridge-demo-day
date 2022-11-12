@@ -1,0 +1,13 @@
+body {
+    background: #4bb5df;
+    text-align: center;
+}
+
+div.col-md-6 {
+    padding: 50px;
+
+}
+
+img {
+    width: 50%;
+}

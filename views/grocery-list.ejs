@@ -54,9 +54,11 @@
     </div>
   </main> -->
 
-  <section class="header">
-    <h1>Grocery Hello</h1>
-    </section>
+  <div class="groceryDiv">
+  
+    <h1>Grocery List</h1>
+    <p>Happy Shopping! Input the grocery items you need to purchase.</p>
+
 
     <section class="groceryItemInput">
         <form action="/groceries" method="POST">
@@ -72,11 +74,12 @@
                 <li class="groceryItem">
                     <input type="checkbox">
                     <span><%= groceries[i].groceries %></span>
-                    <!-- icon -->
+                    <i class="fa fa-trash-o" aria-hidden="true"></i>
                 </li>
             <% } %>
         </ul>
     </section>
+  </div>
 
     <!-- Finalized List (Go to the next step) -->
 </body>

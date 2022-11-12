@@ -67,3 +67,9 @@
   #groceryItems h2{
     cursor: pointer;
   }
+
+  .groceryDiv {
+    padding-top: 100px;
+    font-size: 30px;
+    text-align: center;
+  }

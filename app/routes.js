@@ -62,7 +62,7 @@ module.exports = function (app, passport, db) {
       })
   })
 
-  app.delete('/groceries', (req, res) => {
+  app.delete('/delete', (req, res) => {
     db.collection('groceries').findOneAndDelete({ groceries: req.body.groceries, userID: req.user._id  }, (err, result) => {
       if (err) return res.send(500, err)
       res.send('Message deleted!')

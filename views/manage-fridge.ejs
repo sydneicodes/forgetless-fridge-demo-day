@@ -4,7 +4,7 @@
     <title>Forgetless Fridge</title>
     <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css">
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="manage-fridge.css">
 </head>
 <body>
  <!-- bootstrap navigation -->
@@ -38,11 +38,11 @@
 <!-- navigation -->
 
 <!-- Expiration Dates + Recipes Section -->
-
-<div class="row">
+<div class="manageFridge">
+  <div class="row">
     <div class="col-md-6">
-        <h1>Expiration Dates Check:</h1>
-        <p>Click a date to see when you we</p>
+        <h1>What's In Your Fridge?</h1>
+        <p>This section will be for seeing what is in your fridge. It will be color coded (red, yellow, green: red being needs to be used ASAP and green being in good standing). </p>
           <form action="/messages" method="POST">
 
             <fieldset>
@@ -54,8 +54,14 @@
           </form>
         </div>
     </div>
-    <div class="col-md-6">.col-md-6</div>
+    <div class="col-md-6">
+      <h2>Recipes</h2>
+      <p>This section will be for receipe suggestions based on the expiration date data.</p>
+      <img src="img/cookbook.png">
+    </div>
   </div>
+</div>
+  
 
 
 </body>
