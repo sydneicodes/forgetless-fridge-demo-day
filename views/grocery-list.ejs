@@ -1,86 +1,113 @@
 <!doctype html>
 <html>
-<head> 
-    <title>Forgetless Fridge</title>
-    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap.min.css">
-    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css">
-    <link rel="stylesheet" href="grocerylist.css">
+
+<head>
+  <meta charset="UTF-8" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.0.1/tailwind.min.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css" />
+  <link rel="stylesheet" href="https://uwhealth.github.io/Nu-Connect/uconnect_assets/css/main.css" />
+  <link rel="stylesheet" href="grocery-list.css" />
 </head>
+
 <body>
- <!-- bootstrap navigation -->
-  <header class="navbar navbar-inverse navbar-fixed-top bs-docs-nav" role="banner">
-    <div class="container">
-      <div class="navbar-header">
-        <button class="navbar-toggle" type="button" data-toggle="collapse" data-target=".bs-navbar-collapse">
-          <span class="sr-only">Toggle navigation</span>
-          <span class="icon-bar"></span>
-          <span class="icon-bar"></span>
-          <span class="icon-bar"></span>
-        </button>
-      </div>
-
-      <nav class="collapse navbar-collapse bs-navbar-collapse" role="navigation">
-        <ul class="nav navbar-nav navbar-right">
-          <li>
-            <a href="/profile">Profile</a>
-          </li>
-          <li>
-            <a href="/grocery_list">Grocery List</a>
-          </li>
-          <li>
-            <a href="/manage_fridge">Manage Your Fridge</a>
-          </li>
-          <li><a href="/logout">Log Out</a></li>
-        </ul>
-      </nav>
+<!-- Navigation -->
+  <nav class="flex flex-wrap items-center justify-between p-5 bg-blue-200">
+    <div class="logoBox flex">
     </div>
-  </header>
-
-<!-- navigation -->
-
-<!-- Grocery List -->
-<!-- <main>
-    <div class="container">
-      <div class="notebook">
-        <div class="title">
-          <h1>Grocery List</h1>
-        </div>
-        <div class="input-container">
-          <i class="fa-solid fa-eraser" id="eraser"></i>
-          <input type="text" id="userInput">
-        </div>
-        <div id="groceryItems"></div>
-      </div>
+    <div class="flex md:hidden">
+      <button id="hamburger">
+        <img class="toggle block" src="https://img.icons8.com/fluent-systems-regular/2x/menu-squared-2.png" width="40"
+          height="40" />
+        <img class="toggle" src="https://img.icons8.com/fluent-systems-regular/2x/close-window.png" width="40"
+          height="40" />
+      </button>
     </div>
-  </main> -->
+    <div
+      class="toggle w-full md:w-auto md:flex text-right text-bold mt-5 md:mt-0 border-t-2 border-blue-900 md:border-none">
+      <a href="/grocery-list"
+        class="block md:inline-block text-blue-900 hover:text-blue-500 px-3 py-3 border-b-2 border-blue-900 md:border-none">Grocery
+        List</a>
+      <a href="/manage-fridge"
+        class="block md:inline-block text-blue-900 hover:text-blue-500 px-3 py-3 border-b-2 border-blue-900 md:border-none">Your
+        Fridge</a>
+      <a href="#"
+        class="block md:inline-block text-blue-900 hover:text-blue-500 px-3 py-3 border-b-2 border-blue-900 md:border-none">Recipes</a>
+      <a href="#"
+        class="block md:inline-block text-blue-900 hover:text-blue-500 px-3 py-3 border-b-2 border-blue-900 md:border-none">Dashboard</a>
+    </div>
+    <a href="/"
+      class="toggle md:flex w-full md:w-auto px-4 py-2 text-right bg-blue-900 hover:bg-blue-500 text-white md:rounded">Logout</a>
+  </nav>
+<!-- Navigation -->
 
   <div class="groceryDiv">
-  
+
     <h1>Grocery List</h1>
     <p>Happy Shopping! Input the grocery items you need to purchase.</p>
 
+    <table class="groceryTable">
+      <tr>
+        <th>Grocery</th>
+        <th>Purchased</th>
+        <th>Delete</th>
+      </tr>
 
-    <section class="groceryItemInput">
-        <form action="/groceries" method="POST">
-            <input type="text" id="inputItem" placeholder="Enter grocery item:" name="groceries">
-            <button type="submit" id="addButton">Add</button>
-        </form>
-    </section>
-    
+      <tr class="rows">
+        <td><input placeholder="Grocery Item"></td>
+        <td><input type="checkbox"></td>
+        <td><input type="checkbox"></td>
+      </tr>
+    </table>
+    <button onclick="addRow('groceryTable')" class="add tableBtn">Add Grocery Item</button>
+    <button onclick="deleteRow('groceryTable')" class="delete tableBtn">Delete Row</button>
+    <button class="store tableBtn">Store List</button>
+  </div>
+  <div class="row dashboard-cards">
+    <% for(let i=0; i < list.length; i++){ %>
 
-    <section class="groceryList">
-        <ul>
-            <% for(var i=0; i < groceries.length; i++){ %>
-                <li class="groceryItem">
-                    <input type="checkbox">
-                    <span><%= groceries[i].groceries %></span>
-                    <i class="fa fa-trash-o" aria-hidden="true"></i>
+      <div class="card col-md-4">
+        <div class="card-title">
+          <section class="editList" id="<%= list[i]._id %>">
+            <h2>
+              <input value="<%= list[i].title %>" class="titles">
+
+              </input>
+              <small>
+                <%= list[i].date %>
+              </small>
+            </h2>
+            <span class="edit">✏️</span>
+            <span class="delete">🗑️ </span>
+          </section>
+          <div class="task-count">
+            <%= list[i].groceries.length %>
+          </div>
+        </div>
+        <div class="card-flap flap1">
+          <div class="card-description">
+            <ul class="task-list">
+              <% for (let j=0; j < list[i].groceries.length; j++) { %>
+                <li>
+                  <%= list[i].groceries[j].grocery %>
                 </li>
-            <% } %>
-        </ul>
-    </section>
+                <% } %>
+            </ul>
+          </div>
+          <div class="card-flap flap2">
+            <div class="card-actions">
+              <a class="btn" href="#">Close</a>
+            </div>
+          </div>
+        </div>
+      </div>
+      <% } %>
   </div>
 
-    <!-- Finalized List (Go to the next step) -->
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+  <script src="script.js"></script>
+  <script src="main.js"></script>
+  <script src="list.js"></script>
 </body>
+
 </html>

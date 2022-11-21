@@ -1,3 +1,5 @@
+const { ObjectId } = require("mongodb");
+
 module.exports = function (app, passport, db) {
 
   // normal routes ===============================================================
@@ -7,26 +9,25 @@ module.exports = function (app, passport, db) {
     res.render('index.ejs');
   });
 
-  // PROFILE SECTION =========================
-  app.get('/profile', isLoggedIn, function (req, res) {
-    res.render('profile.ejs', {
+  // WELCOME SECTION =========================
+  app.get('/welcome', isLoggedIn, function (req, res) {
+    res.render('welcome-page.ejs', {
       user: req.user.local
     })
   });
 
   // GROCERY LIST CREATION SECTION ========================= 
-  app.get('/grocery_list', isLoggedIn, function (req, res) {
-      db.collection('groceries').find({userID: req.user._id}).toArray((err, groceries) => {
-        console.log(groceries)
+  app.get('/grocery-list', isLoggedIn, function (req, res) {
+      db.collection('grocery-list').find({userID: req.user._id}).toArray((err, list) => {
         if (err) return console.log(err)
           res.render('grocery-list.ejs', {
-            groceries
+            list
       })
     })
   });
 
   // MANAGE FRIDGE SECTION ========================= 
-  app.get('/manage_fridge', function (req, res) {
+  app.get('/manage-fridge', function (req, res) {
     res.render('manage-fridge.ejs');
   });
 
@@ -39,19 +40,21 @@ module.exports = function (app, passport, db) {
 
   // message board routes ===============================================================
 
-  app.post('/groceries', (req, res) => {
-    db.collection('groceries').save({ groceries: req.body.groceries, userID: req.user._id }, (err, result) => {
+  app.post('/save-list', (req, res) => {
+    console.log(req.body)
+    db.collection('grocery-list').insertOne({ groceries: req.body.groceries, userID: req.user._id, date: new Date().toLocaleDateString(), title: 'Grocery List' }, (err, result) => {
       if (err) return console.log(err)
       console.log('saved to database')
-      res.redirect('/grocery_list')
+      res.redirect('/grocery-list')
     })
   })
 
-  app.put('/groceries', (req, res) => {
-    db.collection('groceries')
-      .findOneAndUpdate({ groceries: req.body.groceries }, {
+  app.put('/edit', (req, res) => {
+    console.log(req.body)
+    db.collection('grocery-list')
+      .findOneAndUpdate({ _id: ObjectId(req.body._id)}, {
         $set: {
-          groceries: req.body.groceries
+          title: req.body.newTitle
         }
       }, {
         sort: { _id: -1 },
@@ -62,8 +65,8 @@ module.exports = function (app, passport, db) {
       })
   })
 
-  app.delete('/delete', (req, res) => {
-    db.collection('groceries').findOneAndDelete({ groceries: req.body.groceries, userID: req.user._id  }, (err, result) => {
+  app.delete('/deleteList', (req, res) => {
+    db.collection('grocery-list').findOneAndDelete({_id: ObjectId(req.body._id)}, (err, result) => {
       if (err) return res.send(500, err)
       res.send('Message deleted!')
     })
@@ -82,7 +85,7 @@ module.exports = function (app, passport, db) {
 
   // process the login form
   app.post('/login', passport.authenticate('local-login', {
-    successRedirect: '/profile', // redirect to the secure profile section
+    successRedirect: '/welcome', // redirect to the welcome page
     failureRedirect: '/login', // redirect back to the signup page if there is an error
     failureFlash: true // allow flash messages
   }));
@@ -95,7 +98,7 @@ module.exports = function (app, passport, db) {
 
   // process the signup form
   app.post('/signup', passport.authenticate('local-signup', {
-    successRedirect: '/profile', // redirect to the secure profile section
+    successRedirect: '/welcome', // redirect to the welcome page
     failureRedirect: '/signup', // redirect back to the signup page if there is an error
     failureFlash: true // allow flash messages
   }));
@@ -113,7 +116,7 @@ module.exports = function (app, passport, db) {
     user.local.email = undefined;
     user.local.password = undefined;
     user.save(function (err) {
-      res.redirect('/profile');
+      res.redirect('/welcome');
     });
   });
 
