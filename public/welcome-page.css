@@ -269,9 +269,10 @@ body {
   float: left;
 }
 
+/* Nav */
 .dashboard-cards {
   position: relative;
-  margin: 0 !important;
+  margin: 20px !important;
 }
 
 .dashboard-cards .card {
@@ -437,11 +438,15 @@ body {
   background: transparent;
   border: none;
   box-shadow: none;
-  font-size: 1.5rem;
+  font-size: 1rem;
   padding-left: 0;
   width: 100%;
 }
 
 .edit {
   margin-top: 7px;
+}
+
+nav {
+  font-weight:800;
 }

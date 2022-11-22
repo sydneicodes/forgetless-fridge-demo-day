@@ -27,9 +27,23 @@ module.exports = function (app, passport, db) {
   });
 
   // MANAGE FRIDGE SECTION ========================= 
-  app.get('/manage-fridge', function (req, res) {
-    res.render('manage-fridge.ejs');
-  });
+  app.get('/manage-fridge', isLoggedIn, function (req, res) {
+    db.collection('grocery-list').find({userID: req.user._id}).toArray((err, list) => {
+      if (err) return console.log(err)
+      const groceries = []
+      for(let i = 0; i < list.length; i++){
+        for(let j = 0; j < list[i].groceries.length; j++){
+          if(list[i].groceries[j].purchased) {
+            groceries.push({grocery: list[i].groceries[j].grocery, listId: list[i]._id, listDate: list[i].date, listTitle: list[i].title})
+          }
+        }
+      }
+      console.log(groceries)
+      res.render('manage-fridge.ejs', {
+        groceries
+    })
+  })
+});
 
 
   // LOGOUT ==============================
