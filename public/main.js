@@ -2,28 +2,39 @@ document.querySelector('.store').addEventListener('click', storeList)
 let trash = document.getElementsByClassName("delete");
 
 
-function storeList(){
+function storeList() {
   console.log('storing...')
   let groceries = []
   let rows = document.getElementsByClassName('rows')
 
 
-for (let i = 0; i < rows.length; i++){
-  let cell = rows[i].getElementsByTagName('td')
-  let grocery = cell[0].getElementsByTagName('input')[0].value
-  let purchased = cell[1].getElementsByTagName('input')[0].checked
-  console.log(purchased)
-  groceries.push({grocery, purchased})
-}
-console.log(groceries)
-window.location.reload(true)
-fetch('save-list', {
-            method: 'post',
-            headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify({
-              'groceries': groceries
-            })
-          })
+  for (let i = 0; i < rows.length; i++) {
+    let cell = rows[i].getElementsByTagName('td')
+    let grocery = cell[0].getElementsByTagName('input')[0].value
+    let purchasedVal = cell[1].getElementsByTagName('input')[0].checked
+    groceries.push({ grocery, purchasedVal })
+  }
+  let purchasedArr = []
+  let unpurchasedArr = []
+
+  let purchasedObj = groceries.filter((grocery) => grocery.purchasedVal)
+
+  purchasedObj.forEach((obj) => {
+    purchasedArr.push(obj.grocery)
+  })
+
+  // window.location.reload(true)
+  fetch('save-list', {
+    method: 'post',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      'groceries': groceries,
+      'purchased': purchasedArr,
+      'unpurchasedCount': groceries.length - purchasedArr.length
+    })
+  })
+  .then((res)=>res.json())
+  .then((data)=>console.log(data))
 }
 
 function addRow(tableID) {
@@ -36,7 +47,7 @@ function addRow(tableID) {
   }
 
   let row = table[0].insertRow(rowCount);
-row.classList.add('rows')
+  row.classList.add('rows')
   let cell1 = row.insertCell(0);
   let element1 = document.createElement("input");
   element1.type = "text";
@@ -60,37 +71,37 @@ row.classList.add('rows')
   cell4.appendChild(element3);
 }
 
-function deleteRow(tableId){
+function deleteRow(tableId) {
   let table = document.getElementsByClassName(tableId);
   let rowCount = table[0].rows.length;
-  for (let i = 0; i < rowCount; i++){
+  for (let i = 0; i < rowCount; i++) {
     let row = table[0].rows[i]
     let checkbox = row.cells[2].childNodes[0]
 
-    if(checkbox.checked){
+    if (checkbox.checked) {
       console.log('checked')
       table[0].deleteRow(i)
       rowCount--
       i--
     }
-    
+
   }
 
 }
 
-Array.from(trash).forEach(function(element) {
-      element.addEventListener('click', function(){
-        const _id = this.parentNode.getAttribute('id')
-        fetch('deleteList', {
-          method: 'delete',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({
-            _id
-          })
-        }).then(function (response) {
-          window.location.reload()
-        })
-      });
+Array.from(trash).forEach(function (element) {
+  element.addEventListener('click', function () {
+    const _id = this.parentNode.getAttribute('id')
+    fetch('deleteList', {
+      method: 'delete',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        _id
+      })
+    }).then(function (response) {
+      window.location.reload()
+    })
+  });
 });

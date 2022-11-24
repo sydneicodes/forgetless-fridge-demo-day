@@ -32,7 +32,7 @@
         Fridge</a>
       <a href="#"
         class="block md:inline-block text-blue-900 hover:text-blue-500 px-3 py-3 border-b-2 border-blue-900 md:border-none">Recipes</a>
-      <a href="#"
+      <a href="/dashboard"
         class="block md:inline-block text-blue-900 hover:text-blue-500 px-3 py-3 border-b-2 border-blue-900 md:border-none">Dashboard</a>
     </div>
     <a href="/"
@@ -88,7 +88,7 @@
             <ul class="task-list">
               <% for (let j=0; j < list[i].groceries.length; j++) { %>
                 <li>
-                  <%= list[i].groceries[j].grocery %>
+                  <%= list[i].groceries[j] %>
                 </li>
                 <% } %>
             </ul>

@@ -3,6 +3,7 @@ let addToFridge = document.getElementsByClassName("addToFridge")
 
 Array.from(addToFridge).forEach(function (element) {
     element.addEventListener('click', function () {
+        console.log('adding to fridge...')
         const listId = this.dataset.listid
         const grocery = this.dataset.grocery
         const expDateId = 'expDate-' + listId + '-' + grocery 
