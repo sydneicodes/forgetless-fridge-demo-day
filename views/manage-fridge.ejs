@@ -52,25 +52,48 @@
     </tr>
     <% for(let i=0; i < list.length; i++){ %>
       <% for (let j=0; j < list[i].groceries.length; j++) { %>
-        <tr>
-          <td>
-            <%= list[i].title %>
-          </td>
-          <td>
-            <%= list[i].groceries[j] %>
-          </td>
 
+        <!-- Show if not consumed -->
+        <% if (!list[i].groceries[j].consume) { %>
+          <!-- NIT-PICK: Would re-name CLASS to something more consistent with the content it displays -->
+          <tr 
+            class="entry"
+            data-grocery="<%= list[i].groceries[j].grocery %>"
+            data-listid="<%= list[i].listId %>" 
+          >
+            <td>
+              <%= list[i].title %>
+            </td>
+            <td>
+              <%= list[i].groceries[j].grocery %>
+            </td>
+  
+            <td>
+              <%= list[i].date %>
+            </td>
 
-          <td>
-            <%= list[i].date %>
-          </td>
-          <td><input id="expDate-<%= list[i].listId%>-<%= list[i].groceries[i]%>" type="date" name="expDate"></td>
+            <!-- Show if no expiration date -->
+            <% if (list[i].groceries[j].expDate === '') { %>
 
-          <td><button data-grocery="<%= list[i].groceries[i] %>" data-listid="<%= list[i].listId %>"
-              class="addToFridge">Add to Fridge</button></td>
-        </tr>
+              <td><input class="expDate" type="date" name="expDate"></td>
+              
+              <td>
+                <button class="addToFridge">Add to Fridge</button>
+              </td>
+            <% } else { %>
+                <!-- Show if there is an expiration date -->
+                <!-- The UI you would show if the item was already in the fridge w/ expiration date -->
+                <td><span>TEST UI</span></td>
+                <td>
+                  <button class="consume">Consume</button>
+                </td>
+            <% } %>
+
+          </tr>
         <% } %>
-          <% } %>
+
+      <% } %>
+    <% } %>
   </table>
 
 

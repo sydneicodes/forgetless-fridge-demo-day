@@ -1,19 +1,14 @@
 let addToFridge = document.getElementsByClassName("addToFridge")
-
+let consume = document.getElementsByClassName("consume")
 
 Array.from(addToFridge).forEach(function (element) {
     element.addEventListener('click', function () {
         console.log('adding to fridge...')
-        const listId = this.dataset.listid
-        const grocery = this.dataset.grocery
-        const expDateId = 'expDate-' + listId + '-' + grocery 
-        console.log(listId)
-        console.log(grocery)
-        console.log(expDateId)
+        const entry = this.closest(".entry")
+        const listId = entry.dataset.listid
+        const grocery = entry.dataset.grocery
+        const expDate = entry.querySelector(".expDate").value
 
-       const dateInput = document.getElementById(expDateId)
-       const expDate = dateInput.value
-       console.log(expDate)
         fetch('addToFridge', {
             method: 'post',
             headers: {
@@ -30,3 +25,24 @@ Array.from(addToFridge).forEach(function (element) {
     });
 });
 
+Array.from(consume).forEach(function (element) {
+    element.addEventListener('click', function () {
+        console.log('removing from fridge...')
+        const entry = this.closest(".entry")
+        const listId = entry.dataset.listid
+        const grocery = entry.dataset.grocery
+
+        fetch('consume', {
+            method: 'put',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                listId,
+                grocery,
+            })
+        }).then(function (response) {
+            window.location.reload()
+        })
+    });
+});

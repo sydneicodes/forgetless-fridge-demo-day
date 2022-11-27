@@ -36,19 +36,19 @@ module.exports = function (app, passport, db) {
   // MANAGE FRIDGE SECTION ========================= 
   app.get('/manage-fridge', isLoggedIn, function (req, res) {
     db.collection('purchased-groceries').find({ userID: req.user._id }).toArray((err, list) => {
-      list.forEach((entry) => {
-        let groceries = entry.groceries
-        groceries.forEach((item) => {
-          console.log(item, 'item')
-          db.collection('fridge').find({ grocery: item }).toArray((err, groceryInFridge) => {
-            console.log(groceryInFridge, 'matched?')
-            if (err) return console.log(err)
-            res.render('manage-fridge.ejs', {
-              list,
-              groceryInFridge
-            })
-          })
-        })
+      // list.forEach((entry) => {
+      //   let groceries = entry.groceries
+      //     groceries.forEach((item) => {
+      //       console.log(item, 'item')
+          
+      //     db.collection('fridge').find({ grocery: item }).toArray((err, groceryInFridge) => {
+      //       console.log(groceryInFridge, 'matched?')
+      //       if (err) return console.log(err)
+      //   })
+      // })
+      res.render('manage-fridge.ejs', {
+        list,
+        // groceryInFridge
       })
     })
   });
@@ -73,11 +73,46 @@ module.exports = function (app, passport, db) {
   })
 
   app.post('/addToFridge', (req, res) => {
-    console.log(req.body)
-    db.collection('fridge').insertOne({ grocery: req.body.grocery, userID: req.user._id, expDate: req.body.expDate, listId: req.body.listId }, (err, result) => {
-      if (err) return console.log(err)
-      console.log('saved to database')
-      res.redirect('/manage-fridge')
+    console.log("Syd Request: ", req.body)
+
+    console.log(`Request to Update Item Type: ${typeof req.body.grocery}`)
+
+    db.collection('purchased-groceries').findOneAndUpdate({ 
+      // grocery: req.body.grocery, 
+      // userID: req.user._id,
+      listId: Number(req.body.listId),
+      "groceries.grocery": req.body.grocery
+    }, {
+      $set: {
+        // target what you want to update, then update the values
+        "groceries.$.expirationDate": req.body.expDate,
+        "groceries.$.fridge": true
+      }
+    }, {
+      sort: { _id: -1 },
+      upsert: true
+    }, (err, result) => {
+      if (err) return res.send(err)
+      res.send(result)
+    })
+  })
+
+  app.put('/consume', (req, res) => {
+    console.log("Syd Request: ", req.body)
+
+    db.collection('purchased-groceries').findOneAndUpdate({ 
+      listId: Number(req.body.listId),
+      "groceries.grocery": req.body.grocery
+    },  {
+      $set: {
+        "groceries.$.consume": true,
+      }
+    }, {
+      sort: { _id: -1 },
+      upsert: true
+    }, (err, result) => {
+      if (err) return res.send(err)
+      res.send(result)
     })
   })
 

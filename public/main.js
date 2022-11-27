@@ -12,23 +12,40 @@ function storeList() {
     let cell = rows[i].getElementsByTagName('td')
     let grocery = cell[0].getElementsByTagName('input')[0].value
     let purchasedVal = cell[1].getElementsByTagName('input')[0].checked
-    groceries.push({ grocery, purchasedVal })
+    groceries.push({ 
+      grocery, 
+      purchasedVal, 
+      expirationDate: "", 
+      fridge: false,
+      consume: false
+    })
   }
-  let purchasedArr = []
-  let unpurchasedArr = []
+  // UNUSED
+  // let purchasedArr = []
+  // let unpurchasedArr = []
 
-  let purchasedObj = groceries.filter((grocery) => grocery.purchasedVal)
+  const purchasedArr = groceries.filter(grocery => grocery.purchasedVal)
+  console.log(`Purchased Array: ${JSON.stringify(purchasedArr)}`)
 
-  purchasedObj.forEach((obj) => {
-    purchasedArr.push(obj.grocery)
-  })
+  // EXAMPLE
+  // const byTwo = [1,2,3].map(num => {
+  //   if(num < 2)
+  //     return num * 2
+  // })
+  // console.log(byTwo) // expected 2
 
-  // window.location.reload(true)
+  // UNKNOWN USAGE
+  // purchasedObj.forEach((obj) => {
+  //   purchasedArr.push(obj.grocery)
+  // })
+
+  window.location.reload(true)
   fetch('save-list', {
     method: 'post',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
-      'groceries': groceries,
+      // UNUSED
+      // 'groceries': groceries,
       'purchased': purchasedArr,
       'unpurchasedCount': groceries.length - purchasedArr.length
     })
