@@ -28,7 +28,7 @@
         class="block md:inline-block text-blue-900 hover:text-blue-500 px-3 py-3 border-b-2 border-blue-900 md:border-none">Grocery
         List</a>
       <a href="/manage-fridge"
-        class="block md:inline-block text-blue-900 hover:text-blue-500 px-3 py-3 border-b-2 border-blue-900 md:border-none">Your
+        class="block md:inline-block text-blue-900 hover:text-blue-500 px-3 py-3 border-b-2 border-blue-900 md:border-none">Manage Your
         Fridge</a>
       <a href="#"
         class="block md:inline-block text-blue-900 hover:text-blue-500 px-3 py-3 border-b-2 border-blue-900 md:border-none">Recipes</a>
@@ -73,7 +73,7 @@
             </td>
 
             <!-- Show if no expiration date -->
-            <% if (list[i].groceries[j].expDate === '') { %>
+            <% if (list[i].groceries[j].expirationDate === '') { %>
 
               <td><input class="expDate" type="date" name="expDate"></td>
               
@@ -83,7 +83,7 @@
             <% } else { %>
                 <!-- Show if there is an expiration date -->
                 <!-- The UI you would show if the item was already in the fridge w/ expiration date -->
-                <td><span>TEST UI</span></td>
+                <td><span>Expires on <%= list[i].groceries[j].expirationDate %></span></td>
                 <td>
                   <button class="consume">Consume</button>
                 </td>

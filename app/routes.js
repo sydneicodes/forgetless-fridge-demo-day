@@ -18,8 +18,44 @@ module.exports = function (app, passport, db) {
 
   // DASHBOARD SECTION =========================
   app.get('/dashboard', isLoggedIn, function (req, res) {
-    res.render('dashboard.ejs', {
-      user: req.user.local
+    db.collection('purchased-groceries').find({ userID: req.user._id }).toArray((err, purchasedGroceries) => {
+      if (purchasedGroceries.length > 1) {
+
+        let count = {}
+
+        let totalGroceries = []
+
+        purchasedGroceries.forEach((entry) => {
+          let groceries = entry.groceries
+
+          groceries.forEach((food) => {
+            totalGroceries.push(food.grocery)
+          })
+        })
+
+        console.log(totalGroceries)
+
+        const result = totalGroceries.reduce((acc, curr) => {
+
+          acc[curr] ??= {
+            count: 0,
+            food: curr
+          }
+            ;
+          acc[curr].count++;
+
+          return acc;
+        }, {});
+
+        const data = Object.values(result)
+        data.sort((a, b) => b.count - a.count)
+        console.log(data)
+
+        res.render('dashboard.ejs', {
+          user: req.user.local,
+          data
+        })
+      }
     })
   });
 
@@ -40,7 +76,7 @@ module.exports = function (app, passport, db) {
       //   let groceries = entry.groceries
       //     groceries.forEach((item) => {
       //       console.log(item, 'item')
-          
+
       //     db.collection('fridge').find({ grocery: item }).toArray((err, groceryInFridge) => {
       //       console.log(groceryInFridge, 'matched?')
       //       if (err) return console.log(err)
@@ -77,7 +113,7 @@ module.exports = function (app, passport, db) {
 
     console.log(`Request to Update Item Type: ${typeof req.body.grocery}`)
 
-    db.collection('purchased-groceries').findOneAndUpdate({ 
+    db.collection('purchased-groceries').findOneAndUpdate({
       // grocery: req.body.grocery, 
       // userID: req.user._id,
       listId: Number(req.body.listId),
@@ -100,10 +136,10 @@ module.exports = function (app, passport, db) {
   app.put('/consume', (req, res) => {
     console.log("Syd Request: ", req.body)
 
-    db.collection('purchased-groceries').findOneAndUpdate({ 
+    db.collection('purchased-groceries').findOneAndUpdate({
       listId: Number(req.body.listId),
       "groceries.grocery": req.body.grocery
-    },  {
+    }, {
       $set: {
         "groceries.$.consume": true,
       }

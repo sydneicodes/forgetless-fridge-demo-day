@@ -29,3 +29,25 @@ function saveNewTitle(e){
           console.log(data)
         })
 } 
+
+document.querySelector(".snap").addEventListener("click", takeAScreenShot);
+
+function takeAScreenShot() {
+  const captureElement = document.querySelector("#capture");
+  html2canvas(captureElement)
+    .then((canvas) => {
+      canvas.style.display = "none";
+      document.body.appendChild(canvas);
+      return canvas;
+    })
+    .then((canvas) => {
+      const image = canvas
+        .toDataURL("image/png")
+        .replace("image/png", "image/octet-stream");
+      const a = document.createElement("a");
+      a.setAttribute("download", "my-list.png");
+      a.setAttribute("href", image);
+      a.click();
+      canvas.remove();
+    });
+}

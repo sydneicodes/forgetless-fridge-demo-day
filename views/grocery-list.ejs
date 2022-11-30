@@ -28,7 +28,7 @@
         class="block md:inline-block text-blue-900 hover:text-blue-500 px-3 py-3 border-b-2 border-blue-900 md:border-none">Grocery
         List</a>
       <a href="/manage-fridge"
-        class="block md:inline-block text-blue-900 hover:text-blue-500 px-3 py-3 border-b-2 border-blue-900 md:border-none">Your
+        class="block md:inline-block text-blue-900 hover:text-blue-500 px-3 py-3 border-b-2 border-blue-900 md:border-none">Manage Your
         Fridge</a>
       <a href="#"
         class="block md:inline-block text-blue-900 hover:text-blue-500 px-3 py-3 border-b-2 border-blue-900 md:border-none">Recipes</a>
@@ -45,7 +45,7 @@
     <h1>Grocery List</h1>
     <p>Happy Shopping! Input the grocery items you need to purchase.</p>
 
-    <table class="groceryTable">
+    <table id="capture" class="groceryTable">
       <tr>
         <th>Grocery</th>
         <th>Purchased</th>
@@ -61,6 +61,7 @@
     <button onclick="addRow('groceryTable')" class="add tableBtn">Add Grocery Item</button>
     <button onclick="deleteRow('groceryTable')" class="delete tableBtn">Delete Row</button>
     <button class="store tableBtn">Store List</button>
+    <button class="snap">📷 </button>
   </div>
   <div class="row dashboard-cards">
     <% for(let i=0; i < list.length; i++){ %>
@@ -103,7 +104,7 @@
       <% } %>
   </div>
 
-
+  <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
   <script src="script.js"></script>
   <script src="main.js"></script>
