@@ -16,49 +16,6 @@ module.exports = function (app, passport, db) {
     })
   });
 
-  // DASHBOARD SECTION =========================
-  app.get('/dashboard', isLoggedIn, function (req, res) {
-    db.collection('purchased-groceries').find({ userID: req.user._id }).toArray((err, purchasedGroceries) => {
-      if (purchasedGroceries.length > 1) {
-
-        let count = {}
-
-        let totalGroceries = []
-
-        purchasedGroceries.forEach((entry) => {
-          let groceries = entry.groceries
-
-          groceries.forEach((food) => {
-            totalGroceries.push(food.grocery)
-          })
-        })
-
-        console.log(totalGroceries)
-
-        const result = totalGroceries.reduce((acc, curr) => {
-
-          acc[curr] ??= {
-            count: 0,
-            food: curr
-          }
-            ;
-          acc[curr].count++;
-
-          return acc;
-        }, {});
-
-        const data = Object.values(result)
-        data.sort((a, b) => b.count - a.count)
-        console.log(data)
-
-        res.render('dashboard.ejs', {
-          user: req.user.local,
-          data
-        })
-      }
-    })
-  });
-
   // GROCERY LIST CREATION SECTION ========================= 
   app.get('/grocery-list', isLoggedIn, function (req, res) {
     db.collection('purchased-groceries').find({ userID: req.user._id }).toArray((err, list) => {
@@ -72,23 +29,61 @@ module.exports = function (app, passport, db) {
   // MANAGE FRIDGE SECTION ========================= 
   app.get('/manage-fridge', isLoggedIn, function (req, res) {
     db.collection('purchased-groceries').find({ userID: req.user._id }).toArray((err, list) => {
-      // list.forEach((entry) => {
-      //   let groceries = entry.groceries
-      //     groceries.forEach((item) => {
-      //       console.log(item, 'item')
-
-      //     db.collection('fridge').find({ grocery: item }).toArray((err, groceryInFridge) => {
-      //       console.log(groceryInFridge, 'matched?')
-      //       if (err) return console.log(err)
-      //   })
-      // })
       res.render('manage-fridge.ejs', {
         list,
-        // groceryInFridge
       })
     })
   });
 
+    // DASHBOARD SECTION =========================
+    app.get('/dashboard', isLoggedIn, function (req, res) {
+      db.collection('purchased-groceries').find({ userID: req.user._id }).toArray((err, purchasedGroceries) => {
+        if (purchasedGroceries.length > 1) {
+  
+          let count = {}
+          let totalGroceries = []
+  
+          purchasedGroceries.forEach((entry) => {
+            let groceries = entry.groceries
+  
+            groceries.forEach((food) => {
+              totalGroceries.push(food.grocery)
+            })
+          })
+          console.log(totalGroceries)
+  
+          const result = totalGroceries.reduce((acc, curr) => {
+            acc[curr] ??= {
+              count: 0,
+              food: curr
+            }
+              ;
+            acc[curr].count++;
+  
+            return acc;
+          }, {});
+  
+          const data = Object.values(result)
+          data.sort((a, b) => b.count - a.count) //top 10 items list: sort the grocery items by most purchased to least purchased 
+          console.log(data)
+  
+          res.render('dashboard.ejs', {
+            user: req.user.local,
+            data
+          })
+        }
+      })
+    });
+  
+    // FOOD WASTE SECTION ========================= 
+    app.get('/food-waste', isLoggedIn, function (req, res) {
+      db.collection('purchased-groceries').find({ userID: req.user._id }).toArray((err, list) => {
+        res.send(
+          list,
+        )
+      })
+    });
+  
 
   // LOGOUT ==============================
   app.get('/logout', function (req, res) {
@@ -96,7 +91,7 @@ module.exports = function (app, passport, db) {
     res.redirect('/');
   });
 
-  // message board routes ===============================================================
+  // POST + PUT routes ===============================================================
 
   app.post('/save-list', (req, res) => {
     console.log(req.body)
