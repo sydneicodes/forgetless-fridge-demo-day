@@ -16,6 +16,26 @@ module.exports = function (app, passport, db) {
     })
   });
 
+  // RECIPES SECTION =========================
+  app.get('/recipes', isLoggedIn, function (req, res) {
+    db.collection('purchased-groceries').find({ userID: req.user._id }).toArray((err, lists) => {
+      let arr = []
+      lists.forEach((list) => {
+        let items = []
+        let groceries = list.groceries
+        groceries.forEach((grocery) => {
+          items.push(grocery.grocery)
+          arr.push(items)
+        })
+      })
+      arr = Array.from(new Set(arr.map(JSON.stringify)), JSON.parse)
+      console.log(arr)
+      res.render('recipes.ejs', {
+        groceryLists: arr
+      })
+    })
+  });
+
   // GROCERY LIST CREATION SECTION ========================= 
   app.get('/grocery-list', isLoggedIn, function (req, res) {
     db.collection('purchased-groceries').find({ userID: req.user._id }).toArray((err, list) => {
@@ -35,55 +55,52 @@ module.exports = function (app, passport, db) {
     })
   });
 
-    // DASHBOARD SECTION =========================
-    app.get('/dashboard', isLoggedIn, function (req, res) {
-      db.collection('purchased-groceries').find({ userID: req.user._id }).toArray((err, purchasedGroceries) => {
-        if (purchasedGroceries.length > 1) {
-  
-          let count = {}
-          let totalGroceries = []
-  
-          purchasedGroceries.forEach((entry) => {
-            let groceries = entry.groceries
-  
-            groceries.forEach((food) => {
-              totalGroceries.push(food.grocery)
-            })
+  // DASHBOARD SECTION =========================
+  app.get('/dashboard', isLoggedIn, function (req, res) {
+    db.collection('purchased-groceries').find({ userID: req.user._id }).toArray((err, purchasedGroceries) => {
+      if (purchasedGroceries.length > 1) {
+
+        let totalGroceries = []
+
+        purchasedGroceries.forEach((entry) => {
+          let groceries = entry.groceries
+
+          groceries.forEach((food) => {
+            totalGroceries.push(food.grocery)
           })
-          console.log(totalGroceries)
-  
-          const result = totalGroceries.reduce((acc, curr) => {
-            acc[curr] ??= {
-              count: 0,
-              food: curr
-            }
-              ;
-            acc[curr].count++;
-  
-            return acc;
-          }, {});
-  
-          const data = Object.values(result)
-          data.sort((a, b) => b.count - a.count) //top 10 items list: sort the grocery items by most purchased to least purchased 
-          console.log(data)
-  
-          res.render('dashboard.ejs', {
-            user: req.user.local,
-            data
-          })
-        }
-      })
-    });
-  
-    // FOOD WASTE SECTION ========================= 
-    app.get('/food-waste', isLoggedIn, function (req, res) {
-      db.collection('purchased-groceries').find({ userID: req.user._id }).toArray((err, list) => {
-        res.send(
-          list,
-        )
-      })
-    });
-  
+        })
+
+        const result = totalGroceries.reduce((acc, curr) => {
+          acc[curr] ??= {
+            count: 0,
+            food: curr
+          }
+            ;
+          acc[curr].count++;
+
+          return acc;
+        }, {});
+
+        const data = Object.values(result)
+        data.sort((a, b) => b.count - a.count) //top 10 items list: sort the grocery items by most purchased to least purchased 
+
+        res.render('dashboard.ejs', {
+          user: req.user.local,
+          data
+        })
+      }
+    })
+  });
+
+  // FOOD WASTE SECTION ========================= 
+  app.get('/food-waste', isLoggedIn, function (req, res) {
+    db.collection('purchased-groceries').find({ userID: req.user._id }).toArray((err, list) => {
+      res.send(
+        list,
+      )
+    })
+  });
+
 
   // LOGOUT ==============================
   app.get('/logout', function (req, res) {
@@ -94,7 +111,6 @@ module.exports = function (app, passport, db) {
   // POST + PUT routes ===============================================================
 
   app.post('/save-list', (req, res) => {
-    console.log(req.body)
     db.collection('purchased-groceries').insertOne({ groceries: req.body.purchased, userID: req.user._id, date: new Date().toLocaleDateString(), title: 'Grocery List', listId: new Date().valueOf(), unpurchasedCount: req.body.unpurchasedCount }, (err, result) => {
       if (err) return console.log(err)
       console.log('saved to database')
@@ -103,10 +119,17 @@ module.exports = function (app, passport, db) {
 
   })
 
-  app.post('/addToFridge', (req, res) => {
-    console.log("Syd Request: ", req.body)
+  app.post('/storeRecipe', (req, res) => {
+    db.collection('recipes').insertOne({ title: req.body.title, userID: req.user._id, date: new Date().toLocaleDateString(), recipeId: req.body.recipeId }, (err, result) => {
+      if (err) return console.log(err)
+      console.log('saved to database')
+      res.redirect('/recipes')
+    })
 
-    console.log(`Request to Update Item Type: ${typeof req.body.grocery}`)
+  })
+
+  app.post('/addToFridge', (req, res) => {
+
 
     db.collection('purchased-groceries').findOneAndUpdate({
       // grocery: req.body.grocery, 
@@ -129,7 +152,6 @@ module.exports = function (app, passport, db) {
   })
 
   app.put('/consume', (req, res) => {
-    console.log("Syd Request: ", req.body)
 
     db.collection('purchased-groceries').findOneAndUpdate({
       listId: Number(req.body.listId),
@@ -148,7 +170,6 @@ module.exports = function (app, passport, db) {
   })
 
   app.put('/edit', (req, res) => {
-    console.log(req.body)
     db.collection('purchased-groceries')
       .findOneAndUpdate({ _id: ObjectId(req.body._id) }, {
         $set: {
