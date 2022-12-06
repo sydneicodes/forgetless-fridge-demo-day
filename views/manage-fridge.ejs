@@ -2,7 +2,7 @@
 <html>
 
 <head>
-  <title>Forgetless Fridge</title>
+  <title>Manage Your Fridge</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.0.1/tailwind.min.css" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css" />
   <link rel="stylesheet" href="https://uwhealth.github.io/Nu-Connect/uconnect_assets/css/main.css" />
@@ -28,7 +28,8 @@
         class="block md:inline-block text-blue-900 hover:text-blue-500 px-3 py-3 border-b-2 border-blue-900 md:border-none">Grocery
         List</a>
       <a href="/manage-fridge"
-        class="block md:inline-block text-blue-900 hover:text-blue-500 px-3 py-3 border-b-2 border-blue-900 md:border-none">Manage Your
+        class="block md:inline-block text-blue-900 hover:text-blue-500 px-3 py-3 border-b-2 border-blue-900 md:border-none">Manage
+        Your
         Fridge</a>
       <a href="/recipes"
         class="block md:inline-block text-blue-900 hover:text-blue-500 px-3 py-3 border-b-2 border-blue-900 md:border-none">Recipes</a>
@@ -56,44 +57,49 @@
         <!-- Show if not consumed -->
         <% if (!list[i].groceries[j].consume) { %>
           <!-- NIT-PICK: Would re-name CLASS to something more consistent with the content it displays -->
-          <tr 
-            class="entry"
-            data-grocery="<%= list[i].groceries[j].grocery %>"
-            data-listid="<%= list[i].listId %>" 
-          >
+          <tr class="entry" data-grocery="<%= list[i].groceries[j].grocery %>" data-listid="<%= list[i].listId %>">
             <td>
               <%= list[i].title %>
             </td>
             <td>
               <%= list[i].groceries[j].grocery %>
             </td>
-  
+
             <td>
               <%= list[i].date %>
             </td>
 
             <!-- Show if no expiration date -->
-            <% if (list[i].groceries[j].expirationDate === '') { %>
+            <% if (list[i].groceries[j].expirationDate==='' ) { %>
 
               <td><input class="expDate" type="date" name="expDate"></td>
-              
+
               <td>
                 <button class="addToFridge">Add to Fridge</button>
               </td>
-            <% } else { %>
+              <% } else { %>
                 <!-- Show if there is an expiration date -->
                 <!-- The UI you would show if the item was already in the fridge w/ expiration date -->
-                <td><span>Expires on <%= list[i].groceries[j].expirationDate %></span></td>
-                <td>
-                  <button class="consume">Consume</button>
-                </td>
-            <% } %>
+                <% if(list[i].groceries[j].days > 0){%>
+                  <td><span <%=list[i].groceries[j].days < 4 && list[i].groceries[j].days> 0 ? 'class= warning' :
+                      list[i].groceries[j].days > 4 ? 'class=null' : 'class=expired'%>>
+                      Expires in <%=
+                        list[i].groceries[j].days %> days</span></td>
+                  <td>
+                    <%} else {%>
+                  <td><span <%=list[i].groceries[j].days < 4 && list[i].groceries[j].days> 0 ? 'class= warning' :
+                      list[i].groceries[j].days > 4 ? 'class=null' : 'class=expired'%>>EXPIRED!</span></td>
+                  <td>
+                    <% } %>
+                      <button class="consume">Consume</button>
+                  </td>
+                  <% } %>
 
           </tr>
-        <% } %>
+          <% } %>
 
-      <% } %>
-    <% } %>
+            <% } %>
+              <% } %>
   </table>
 
 

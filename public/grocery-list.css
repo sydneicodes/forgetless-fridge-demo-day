@@ -285,4 +285,20 @@
     font-weight:800;
   }
   
+
+  .selector{
+    text-align: center;
+    padding: 30px;
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+  }
+
+  .tables{
+    text-align: center;
+  }
+
+  button.selectBtn{
+    margin-bottom: 15px;
+  }
   /* #endregion */

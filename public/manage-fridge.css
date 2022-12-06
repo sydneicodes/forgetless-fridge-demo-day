@@ -1,5 +1,5 @@
 body {
-    background: #4bb5df;
+    background: #f2f5f7;
     text-align: center;
 }
 
@@ -193,4 +193,27 @@ img {
 
   nav {
     font-weight:800;
+  }
+
+
+  .warning{
+    font-family: monospace;
+    background: rgb(255, 153, 0);
+    padding: 8px;
+    border-radius: 5px;
+    color: white;
+  }
+
+  table{
+    width:70%;
+    margin:auto
+
+  }
+
+  .expired{
+    font-family: monospace;
+    background: red;
+    padding: 8px;
+    border-radius: 5px;
+    color: white;
   }

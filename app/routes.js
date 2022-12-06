@@ -83,10 +83,34 @@ module.exports = function (app, passport, db) {
 
         const data = Object.values(result)
         data.sort((a, b) => b.count - a.count) //top 10 items list: sort the grocery items by most purchased to least purchased 
-
+        data.forEach((info, index) => {
+          let count = index + 1
+          let place = ''
+          switch (count) {
+            case 1:
+              place = 'First'
+              break
+            case 2:
+              place = 'Second'
+              break
+            case 3:
+              place = 'Third'
+              break
+            case 4:
+              place = 'Fourth'
+              break
+            case 5:
+              place = 'Fifth'
+              break;
+            default:
+              place = 'Last'
+          }
+          info.place = place
+        })
         res.render('dashboard.ejs', {
           user: req.user.local,
-          data
+          data,
+          purchasedGroceries,
         })
       }
     })
@@ -97,6 +121,19 @@ module.exports = function (app, passport, db) {
     db.collection('purchased-groceries').find({ userID: req.user._id }).toArray((err, list) => {
       res.send(
         list,
+      )
+    })
+  });
+
+  app.get('/meals-data', isLoggedIn, function (req, res) {
+    db.collection('recipes').find({ userID: req.user._id }).toArray((err, recipes) => {
+
+      let meals = {}
+      recipes.forEach((recipe) => {
+        meals[recipe.date] = (meals[recipe.date] || 0) + 1
+      })
+      res.send(
+        meals,
       )
     })
   });
@@ -129,8 +166,6 @@ module.exports = function (app, passport, db) {
   })
 
   app.post('/addToFridge', (req, res) => {
-
-
     db.collection('purchased-groceries').findOneAndUpdate({
       // grocery: req.body.grocery, 
       // userID: req.user._id,
@@ -140,7 +175,10 @@ module.exports = function (app, passport, db) {
       $set: {
         // target what you want to update, then update the values
         "groceries.$.expirationDate": req.body.expDate,
-        "groceries.$.fridge": true
+        "groceries.$.fridge": true,
+        "groceries.$.nutrition": req.body.nutrients,
+        "groceries.$.days": req.body.days
+
       }
     }, {
       sort: { _id: -1 },
