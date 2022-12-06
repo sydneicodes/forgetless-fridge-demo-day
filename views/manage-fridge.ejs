@@ -80,20 +80,20 @@
               <% } else { %>
                 <!-- Show if there is an expiration date -->
                 <!-- The UI you would show if the item was already in the fridge w/ expiration date -->
-                <% if(list[i].groceries[j].days > 0){%>
-                  <td><span <%=list[i].groceries[j].days < 4 && list[i].groceries[j].days> 0 ? 'class= warning' :
-                      list[i].groceries[j].days > 4 ? 'class=null' : 'class=expired'%>>
-                      Expires in <%=
-                        list[i].groceries[j].days %> days</span></td>
-                  <td>
-                    <%} else {%>
-                  <td><span <%=list[i].groceries[j].days < 4 && list[i].groceries[j].days> 0 ? 'class= warning' :
-                      list[i].groceries[j].days > 4 ? 'class=null' : 'class=expired'%>>EXPIRED!</span></td>
-                  <td>
+                <% if(list[i].groceries[j].days> 0){%>
+
+                  <%let isAlmostExpired=list[i].groceries[j].days < 4 && list[i].groceries[j].days> 0 %>
+
+                    <td><span <%=isAlmostExpired ? 'class= warning' : 'class=null' %>>
+                        Expires in <%= list[i].groceries[j].days %> days</span></td>
+                    <td>
+                      <%} else {%>
+                    <td><span class="expired">EXPIRED!</span></td>
+                    <td>
+                      <% } %>
+                        <button class="consume">Consume</button>
+                    </td>
                     <% } %>
-                      <button class="consume">Consume</button>
-                  </td>
-                  <% } %>
 
           </tr>
           <% } %>

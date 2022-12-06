@@ -15,6 +15,7 @@
   <script src="../dashboard/js/mealConsistency.js" defer></script>
   <script src="../dashboard/js/nutrition.js" defer></script>
   <script src="../dashboard/js/food-waste-chart.js" defer></script>
+  <link rel="stylesheet" href="../dashboard/style.css">
 </head>
 
 <body>
@@ -94,9 +95,12 @@
             </div>
             <!-- Meal Consistency Chart -->
             <div class="min-w-0 p-4 bg-white rounded-lg shadow-xs dark:bg-gray-800">
-              <h4 class="mb-4 font-semibold text-gray-800 dark:text-gray-300">
-                Meal Consistency
-              </h4>
+              <div class="graphHeader">
+                <h4 class="mb-4 font-semibold text-gray-800 dark:text-gray-300">
+                  Meal Consistency
+                </h4><span data-tooltip="These are how many generated recipes you're consuming every day.">
+                  i</span>
+              </div>
               <canvas id="line"></canvas>
               <div class="flex justify-center mt-4 space-x-3 text-sm text-gray-600 dark:text-gray-400">
                 <div class="flex items-center">
@@ -124,7 +128,7 @@
                     <th class="px-4 py-3">Rank</th>
                     <th class="px-4 py-3">Grocery</th>
                     <th class="px-4 py-3">Count</th>
-                    <th class="px-4 py-3">Last Bought</th>
+                    <!-- <th class="px-4 py-3">Last Bought</th> -->
                   </tr>
                 </thead>
                 <tbody class="bg-white divide-y dark:divide-gray-700 dark:bg-gray-800">
@@ -157,8 +161,8 @@
                           class="px-2 py-1 font-semibold leading-tight text-green-700 bg-green-100 rounded-full dark:bg-green-700 dark:text-green-100">
                           <%= data[i].count %>
                         </span>
-                      </td>
-                      <td class="px-4 py-3 text-sm">6/10/2020</td>
+                      <!-- </td>
+                      <td class="px-4 py-3 text-sm">6/10/2020</td> -->
                     </tr>
                     <% } %>
                 </tbody>

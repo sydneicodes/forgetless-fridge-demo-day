@@ -1,12 +1,15 @@
-btns = document.querySelectorAll('.get')
-console.log(btns)
-btns.forEach((btn) => btn.addEventListener('click', getRecipe))
+btn = document.querySelector('.get')
+console.log(btn)
+btn.addEventListener('click', getRecipe)
 let key = '6b7680345b1c48a9a7b87518cb165e62'
-
+let clickCount = 0
+//to generate recipe based on items in list 
 function getRecipe(e) {
+    clickCount += 1
+    console.log(clickCount)
     let container = document.querySelector('.tables')
     let ingredients = document.querySelector('select').value
-    console.log(ingredients)
+   
     fetch(`https://api.spoonacular.com/recipes/findByIngredients?ingredients=${ingredients}&apiKey=${key}&number=3`)
         .then((res) => res.json())
         .then((data) => {
@@ -54,8 +57,11 @@ function getRecipe(e) {
         })
 }
 
-
+//to store recipe
 function storeRecipe(e) {
+    let btn = e.target
+    btn.style.background = 'green'
+    btn.innerText = '✅ recipe stored!'
     let title = e.target.dataset.title
     let recipeId = e.target.dataset.id
 
