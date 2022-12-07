@@ -57,11 +57,12 @@ module.exports = function (app, passport, db) {
 
   // DASHBOARD SECTION =========================
   app.get('/dashboard', isLoggedIn, function (req, res) {
+    console.log('getting dashboard...')
     db.collection('purchased-groceries').find({ userID: req.user._id }).toArray((err, purchasedGroceries) => {
+      console.log("purchased groceries=",purchasedGroceries)
+      let data
       if (purchasedGroceries.length > 1) {
-
         let totalGroceries = []
-
         purchasedGroceries.forEach((entry) => {
           let groceries = entry.groceries
 
@@ -69,9 +70,9 @@ module.exports = function (app, passport, db) {
             totalGroceries.push(food.grocery)
           })
         })
-
+        console.log("total groceries=", totalGroceries)
         const result = totalGroceries.reduce((acc, curr) => {
-          acc[curr] ??= {
+          acc[curr] ??= { //if acc does not have a current value, make it equal to a following object: count & food
             count: 0,
             food: curr
           }
@@ -80,8 +81,9 @@ module.exports = function (app, passport, db) {
 
           return acc;
         }, {});
-
-        const data = Object.values(result)
+        console.log("results=", result)
+        data = Object.values(result)
+        console.log("date before=", data)
         data.sort((a, b) => b.count - a.count) //top 10 items list: sort the grocery items by most purchased to least purchased 
         data.forEach((info, index) => {
           let count = index + 1
@@ -107,12 +109,13 @@ module.exports = function (app, passport, db) {
           }
           info.place = place
         })
-        res.render('dashboard.ejs', {
-          user: req.user.local,
-          data,
-          purchasedGroceries,
-        })
+        console.log("data after", data)
       }
+      res.render('dashboard.ejs', {
+        user: req.user.local,
+        data,
+        purchasedGroceries,
+      })
     })
   });
 
@@ -127,7 +130,6 @@ module.exports = function (app, passport, db) {
 
   app.get('/meals-data', isLoggedIn, function (req, res) {
     db.collection('recipes').find({ userID: req.user._id }).toArray((err, recipes) => {
-
       let meals = {}
       recipes.forEach((recipe) => {
         meals[recipe.date] = (meals[recipe.date] || 0) + 1
@@ -167,8 +169,6 @@ module.exports = function (app, passport, db) {
 
   app.post('/addToFridge', (req, res) => {
     db.collection('purchased-groceries').findOneAndUpdate({
-      // grocery: req.body.grocery, 
-      // userID: req.user._id,
       listId: Number(req.body.listId),
       "groceries.grocery": req.body.grocery
     }, {

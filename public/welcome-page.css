@@ -450,3 +450,11 @@ body {
 nav {
   font-weight:800;
 }
+
+.container {
+  padding-left: 15px; 
+  padding-right: 15px;
+  text-align: center;
+}
+
+

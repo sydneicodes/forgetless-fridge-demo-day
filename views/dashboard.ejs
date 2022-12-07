@@ -70,27 +70,17 @@
             <div class="min-w-0 p-4 bg-white rounded-lg shadow-xs dark:bg-gray-800">
               <h4 class="mb-4 font-semibold text-gray-800 dark:text-gray-300">
                 Nutritional Breakdown of <select class="nutritionSelection">
+                  <% if(purchasedGroceries) {%>
                   <% for(let i=0; i < purchasedGroceries.length; i++) { %>
                     <option value="<%= purchasedGroceries[i]._id %>">
                       <%= purchasedGroceries[i].title %>
                     </option>
                     <% } %>
+                    <% } %>
                 </select>
               </h4>
               <canvas id="pie"></canvas>
-              <div class="flex justify-center mt-4 space-x-3 text-sm text-gray-600 dark:text-gray-400">
-                <div class="flex items-center">
-                  <span class="inline-block w-3 h-3 mr-1 bg-blue-500 rounded-full"></span>
-                  <span>Shirts</span>
-                </div>
-                <div class="flex items-center">
-                  <span class="inline-block w-3 h-3 mr-1 bg-teal-600 rounded-full"></span>
-                  <span>Shoes</span>
-                </div>
-                <div class="flex items-center">
-                  <span class="inline-block w-3 h-3 mr-1 bg-purple-600 rounded-full"></span>
-                  <span>Bags</span>
-                </div>
+              <div class="pieLegend flex justify-center mt-4 space-x-3 text-sm text-gray-600 dark:text-gray-400">
               </div>
             </div>
             <!-- Meal Consistency Chart -->
@@ -105,17 +95,18 @@
               <div class="flex justify-center mt-4 space-x-3 text-sm text-gray-600 dark:text-gray-400">
                 <div class="flex items-center">
                   <span class="inline-block w-3 h-3 mr-1 bg-teal-600 rounded-full"></span>
-                  <span>Organic</span>
+                  <span>Days</span>
                 </div>
                 <div class="flex items-center">
-                  <span class="inline-block w-3 h-3 mr-1 bg-purple-600 rounded-full"></span>
-                  <span>Paid</span>
+                  <!-- <span class="inline-block w-3 h-3 mr-1 bg-purple-600 rounded-full"></span>
+                  <span>Paid</span> -->
                 </div>
               </div>
             </div>
           </div>
 
           <!-- Top Purchased Items Chart -->
+          <% if(data) { %>
           <h2 class="my-6 text-2xl font-semibold text-gray-700 dark:text-gray-200">
             Top Purchased Items
           </h2>
@@ -138,9 +129,9 @@
                         <div class="flex items-center text-sm">
                           <!-- Avatar with inset shadow -->
                           <div class="relative hidden w-8 h-8 mr-3 rounded-full md:block">
-                            <img class="object-cover w-full h-full rounded-full"
-                              src="https://images.unsplash.com/flagged/photo-1570612861542-284f4c12e75f?ixlib=rb-1.2.1&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=200&fit=max&ixid=eyJhcHBfaWQiOjE3Nzg0fQ"
-                              alt="" loading="lazy" />
+                            <!-- <img class="object-cover w-full h-full rounded-full"
+                              src="#"
+                              alt="" loading="lazy" /> -->
                             <div class="absolute inset-0 rounded-full shadow-inner" aria-hidden="true"></div>
                           </div>
                           <div>
@@ -165,26 +156,27 @@
                       <td class="px-4 py-3 text-sm">6/10/2020</td> -->
                     </tr>
                     <% } %>
-                </tbody>
-              </table>
+                  </tbody>
+                </table>
+              </div>
             </div>
-          </div>
-          <!-- Food Waste Chart -->
-          <div class="grid gap-6 mb-8 md:grid-cols-2 mt-10">
-            <div class="min-w-0 p-4 bg-white rounded-lg shadow-xs dark:bg-gray-800">
-              <h4 class="mb-4 font-semibold text-gray-800 dark:text-gray-300">
-                Food waste
+            <% } %>
+            <!-- Food Waste Chart -->
+            <div class="grid gap-6 mb-8 md:grid-cols-2 mt-10">
+              <div class="min-w-0 p-4 bg-white rounded-lg shadow-xs dark:bg-gray-800">
+                <h4 class="mb-4 font-semibold text-gray-800 dark:text-gray-300">
+                Food Waste
               </h4>
               <canvas id="bars"></canvas>
               <div class="flex justify-center mt-4 space-x-3 text-sm text-gray-600 dark:text-gray-400">
                 <!-- Chart legend -->
                 <div class="flex items-center">
                   <span class="inline-block w-3 h-3 mr-1 bg-teal-600 rounded-full"></span>
-                  <span>Organic</span>
+                  <span>Wasted</span>
                 </div>
                 <div class="flex items-center">
                   <span class="inline-block w-3 h-3 mr-1 bg-purple-600 rounded-full"></span>
-                  <span>Paid</span>
+                  <span>Consumed</span>
                 </div>
               </div>
             </div>

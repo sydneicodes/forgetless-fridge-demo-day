@@ -96,12 +96,12 @@
     font-weight: 600;
     font-size: 1rem;
   }
-.logoBox {
+/* .logoBox {
   height: 40px;
-  background-image:url('../public/img/logo.PNG');
+  background-image:url('../img/fridge.png');
   border: 1px solid red;
   width: 140px;
-}
+} */
 
   /* #region History and Nav Bar */
   .dashboard-cards {
@@ -298,7 +298,12 @@
     text-align: center;
   }
 
-  button.selectBtn{
+  .selectBtn{
     margin-bottom: 15px;
+  }
+
+  h1 {
+    font-family: inherit;
+    font-weight: bold;
   }
   /* #endregion */
