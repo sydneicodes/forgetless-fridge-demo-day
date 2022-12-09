@@ -6,4 +6,4 @@ Not forgetful. ForgetLESS. Less Waste, Less Stress.
 
 This application is created with neurodivergent folx in mind, but anyone who shares the frustrations that comes with managing your kitchen can benefit from Forgetless Fridge. From creating your grocery list to having convenient recipes at your disposal based on fridge inventory and expiration dates, this application is meant to make life easy.
 
-[Demo Video Coming Soon] 
+[Demo Video Coming Soon].
